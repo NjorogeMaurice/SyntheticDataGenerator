@@ -1,5 +1,5 @@
 import os
-from werkzeug.middleware.dispatcher import DispatcherMiddleware
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 import pandas as pd
 import requests
@@ -8,15 +8,21 @@ from werkzeug.utils import secure_filename
 from dkan import DataCatalogFetchAPI
 from synthData import generate_synthetic_data
 
-app = Flask(__name__, static_url_path="/synthetic-data/static", static_folder="static")
+app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['DOWNLOAD_FOLDER'] = os.path.join('static', 'downloads')
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 os.makedirs(app.config['DOWNLOAD_FOLDER'], exist_ok=True)
 app.secret_key = 'supersecretkey'
-app.wsgi_app = DispatcherMiddleware(Flask('dummy_root'), {
-    '/synthetic-data/': app.wsgi_app
-})
+
+# Configure Flask to work behind a proxy with a subdirectory
+app.wsgi_app = ProxyFix(
+    app.wsgi_app,
+    x_for=1,
+    x_proto=1,
+    x_host=1,
+    x_prefix=1
+)
 
 ALLOWED_EXTENSIONS = {'csv'}
 MAX_FILE_SIZE = 500 * 1024 * 1024  # 500MB in bytes
