@@ -1,0 +1,115 @@
+
+ {% extends "base.html" %}
+
+{% block content %}
+<div class="container mx-auto my-8 p-6 bg-white shadow-lg rounded-lg">
+<div class="max-w-xl mx-auto my-4 border-b-2 pb-4">
+	<div class="flex pb-3">
+		<div class="flex-1"></div>
+
+		<div class="flex-1">
+			<div class="w-10 h-10 bg-green-700 mx-auto rounded-full text-lg text-white flex items-center">
+				<span class="text-white text-center w-full"><i class="fa fa-check w-full fill-current text-white"></i></span>
+			</div>
+		</div>
+
+		<div class="w-1/6 align-center items-center align-middle content-center flex">
+			<div class="w-full bg-green-500 rounded items-center align-middle align-center flex-1">
+			  	<div class="bg-green-500 text-xs leading-none py-1 text-center text-gray-900 rounded" style="width: 100%"></div>
+			</div>
+		</div>
+
+		<div class="flex-1">
+			<div class="w-10 h-10 bg-green-700 mx-auto rounded-full text-lg text-white flex items-center">
+				<span class="text-white text-center w-full"><i class="fa fa-check w-full fill-current text-white"></i></span>
+			</div>
+		</div>
+
+		<div class="w-1/6 align-center items-center align-middle content-center flex">
+			<div class="w-full bg-green-500 rounded items-center align-middle align-center flex-1">
+			  	<div class="bg-green-500 text-xs leading-none py-1 text-center text-gray-900 rounded" style="width: 100%"></div>
+			</div>
+		</div>
+
+		<div class="flex-1">
+			<div class="w-10 h-10 bg-white border-2 border-gray-300 mx-auto rounded-full text-lg text-white flex items-center">
+				<span class="text-gray-700 text-center w-full">3</span>
+			</div>
+		</div>
+
+		<div class="flex-1"></div>
+	</div>
+
+	<div class="flex text-xs content-center text-center">
+		<div class="w-1/3">
+			Data Upload
+		</div>
+		<div class="w-1/3">
+			Generate Data
+		</div>
+		<div class="w-1/3">
+			Download Data
+		</div>
+	</div>
+</div>
+        <h1 class="text-2xl font-bold text-green-600 mb-4">Synthetic Data</h1>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="mb-4">
+                    {% for category, message in messages %}
+                        <div class="p-3 rounded-md {% if category == 'success' %} bg-green-200 text-green-800 {% elif category == 'error' %} bg-red-200 text-red-800 {% else %} bg-gray-200 text-gray-800 {% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-300 rounded-lg">
+                <thead class="bg-gray-200">
+                    <tr>
+                        {% for col in columns %}
+                            <th class="border border-gray-300 px-4 py-2 text-left">{{ col }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in rows %}
+                        <tr class="hover:bg-gray-100">
+                            {% for col in columns %}
+                                <td class="border border-gray-300 px-4 py-2">{{ row[col] }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-6 flex gap-4">
+            <a href="{{ url_for('download_file', filename=filename) }}" class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition">
+                Download CSV
+            </a>
+
+            <button onclick="copyToClipboard()" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition">
+                Copy Shareable Link
+            </button>
+
+            <a href="{{ url_for('upload') }}" class="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition">
+                Upload Another File
+            </a>
+        </div>
+
+        <input type="text" value="{{ file_url }}" id="fileUrl" readonly class="mt-4 w-full p-2 border rounded-lg text-gray-600">
+
+        <script>
+            function copyToClipboard() {
+                var copyText = document.getElementById("fileUrl");
+                copyText.select();
+                document.execCommand("copy");
+                alert("Copied to clipboard: " + copyText.value);
+            }
+        </script>
+    </div>
+{% endblock %}
