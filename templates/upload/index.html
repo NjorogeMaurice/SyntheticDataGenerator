@@ -86,7 +86,7 @@
     {% endwith %}
 
 
-    <form method="POST" enctype="multipart/form-data" action="/upload" class="mt-6 space-y-4" id="upload-form">
+    <form method="POST" enctype="multipart/form-data" action="/synthetic-data/upload" class="mt-6 space-y-4" id="upload-form">
         <div class="flex flex-col sm:flex-row gap-4">
             <input type="file" name="dataset" accept=".csv" 
                    class="file-input border border-gray-300 rounded-lg p-2 w-full sm:w-2/3">
@@ -137,7 +137,7 @@
         fetchButton.disabled = true;
         resultsContainer.innerHTML = "<p style='color: blue;'>Fetching...</p>";
 
-        fetch("/fetch_dkan", {
+        fetch("/synthetic-data/fetch_dkan", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
