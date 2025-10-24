@@ -92,24 +92,24 @@
                 Download CSV
             </a>
 
-            <button onclick="copyToClipboard()" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition">
+            <!-- <button onclick="copyToClipboard()" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition">
                 Copy Shareable Link
-            </button>
+            </button> -->
 
             <a href="{{ url_for('upload') }}" class="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition">
                 Upload Another File
             </a>
         </div>
 
-        <input type="text" value="{{ file_url }}" id="fileUrl" readonly class="mt-4 w-full p-2 border rounded-lg text-gray-600">
+        <!-- <input type="text" value="{{ file_url }}" id="fileUrl" readonly class="mt-4 w-full p-2 border rounded-lg text-gray-600"> -->
 
-        <script>
+        <!-- <script>
             function copyToClipboard() {
                 var copyText = document.getElementById("fileUrl");
                 copyText.select();
                 document.execCommand("copy");
                 alert("Copied to clipboard: " + copyText.value);
             }
-        </script>
+        </script> -->
     </div>
 {% endblock %}
