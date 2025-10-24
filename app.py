@@ -14,7 +14,7 @@ app.config['DOWNLOAD_FOLDER'] = os.path.join('static', 'downloads')
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 os.makedirs(app.config['DOWNLOAD_FOLDER'], exist_ok=True)
 app.secret_key = 'supersecretkey'
-
+app.config['APPLICATION_ROOT'] = '/synthetic-data'
 # Configure Flask to work behind a proxy with a subdirectory
 app.wsgi_app = ProxyFix(
     app.wsgi_app,
@@ -64,11 +64,11 @@ def is_valid_csv_url(url):
 def page_not_found(error):
     return render_template('404.html'), 404  # Render a custom 404 page
 
-@app.route('/')
+@app.route('/synthetic-data/')
 def index():  # put application's code here
     return render_template('index.html')
 
-@app.route('/fetch_dkan',methods=['POST'])
+@app.route('/synthetic-data/fetch_dkan',methods=['POST'])
 def fetch_datasets():
     print('fetching datasets')
     dkan_api = DataCatalogFetchAPI("https://dassa.aphrc.org/data-catalog/")
@@ -76,7 +76,7 @@ def fetch_datasets():
     saved_urls= dkan_api.get_dataset_resources()
     return {"urls":saved_urls}
 
-@app.route('/upload',methods=['POST','GET'])
+@app.route('/synthetic-data/upload',methods=['POST','GET'])
 def upload():  # put application's code here
     if request.method == 'POST':
         file = request.files.get('dataset')
@@ -116,7 +116,7 @@ def upload():  # put application's code here
     return render_template('upload/index.html')
 
 
-@app.route('/view-data/<filename>')
+@app.route('/synthetic-data/view-data/<filename>')
 def view_data(filename):
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
     print(filepath)
@@ -130,7 +130,7 @@ def view_data(filename):
 
     return render_template('Process/view_data.html', columns=columns, rows=top_rows, filename=filename)
 
-@app.route('/process-data/<filename>', methods=['POST'])
+@app.route('/synthetic-data/process-data/<filename>', methods=['POST'])
 def process_columns(filename):
     selected_columns = request.form.getlist('selected_columns')
 
@@ -166,7 +166,7 @@ def process_columns(filename):
     return redirect(url_for('download_data', filename=processed_filename))
 
 
-@app.route('/download-data/<filename>')
+@app.route('/synthetic-data/download-data/<filename>')
 def download_data(filename):
     processed_filepath = os.path.join(app.config['DOWNLOAD_FOLDER'], filename)
 
@@ -185,7 +185,7 @@ def download_data(filename):
     return render_template('Process/download_data.html', columns=columns, rows=data, file_url=file_url, filename=filename)
 
 
-@app.route('/download/<filename>')
+@app.route('/synthetic-data/download/<filename>')
 def download_file(filename):
     return send_from_directory(app.config['DOWNLOAD_FOLDER'], filename, as_attachment=True)
 
