@@ -24,5 +24,5 @@ COPY . .
 # Expose the application's port (Flask typically runs on 5000)
 EXPOSE 8000
 
-# Use Gunicorn with Uvicorn workers for async & scalable performance
-CMD ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "-w", "4", "-b", "0.0.0.0:8000", "app:app"]
+# Use Gunicorn for Flask (WSGI)
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:8000", "app:app"]
